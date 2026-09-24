@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "user_id": "3f6c2b7e-9d1a-4c58-8e0b-5a1d7c4f2e91",
+  "sms_hash": "9e80e83cc07f0f2a13eb5bc0b036670fc93673eb3b517a5dabd58ef80dd1097f",
+  "sender": "VM-HDFCBK",
+  "sms_received_at": "2026-09-12T15:11:07Z",
+  "is_expense": true,
+  "txn_type": "DEBIT",
+  "amount": "436.00",
+  "currency": "INR",
+  "merchant": "SWIGGY",
+  "category": "FOOD",
+  "account_last4": "3301",
+  "txn_date": "2026-09-12"
+}

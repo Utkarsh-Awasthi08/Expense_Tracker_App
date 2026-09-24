@@ -1,0 +1,18 @@
+_format_version: "2.1"
+services:
+  - name: auth-service
+    url: http://auth-service:9898
+    routes:
+      - name: sign-up
+        paths:
+          - /auth/v1/signup
+        strip_path: false
+
+  - name: user-service
+    url: http://user-service:8888
+    routes:
+      - name: get-user
+        paths:
+          - /user/v1/getUser
+        strip_path: false
+

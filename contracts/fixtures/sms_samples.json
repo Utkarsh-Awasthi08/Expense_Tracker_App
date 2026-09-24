@@ -1,0 +1,416 @@
+[
+  {
+    "id": "card-debit-myntra",
+    "sender": "HDFCBK",
+    "body": "Spent Rs.2349.00 On HDFC Bank Card XX4521 At MYNTRA On 2026-09-03:14:22:10.Not You? To Block+Reissue Call 18002586161",
+    "received_at": "2026-09-03T14:22:41+05:30",
+    "note": "Card debit; date embedded as yyyy-mm-dd:hh:mm:ss; 11-digit helpline number is masked before any LLM call.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "2349.00",
+      "currency": "INR",
+      "merchant": "MYNTRA",
+      "category": "SHOPPING",
+      "account_last4": "4521",
+      "txn_date": "2026-09-03",
+      "sms_hash": "b52a85c320dffcce740ce17b021e4f7881f25c7e14969e14b3bb6e0cfe18685e"
+    }
+  },
+  {
+    "id": "upi-debit-person-sbi",
+    "sender": "VM-SBIUPI",
+    "body": "Dear UPI user A/C X1234 debited by 850.0 on date 05Sep26 trf to RAHUL KUMAR Refno 424815937261. If not u? call 1800111109. -SBI",
+    "received_at": "2026-09-05T19:03:12+05:30",
+    "note": "UPI debit to a person; SBI writes one decimal (850.0), which the amount pattern allows; 12-digit Refno is not the amount.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "850.0",
+      "currency": "INR",
+      "merchant": "RAHUL KUMAR",
+      "category": "TRANSFER",
+      "account_last4": "1234",
+      "txn_date": "2026-09-05",
+      "sms_hash": "cdc120c2a1484090b6d6581d92f8ed879b2d4f628843a09679edff4f98e7ed60"
+    }
+  },
+  {
+    "id": "atm-cash-withdrawal-icici",
+    "sender": "AX-ICICIB",
+    "body": "ICICI Bank Acct XX7788 debited Rs 10,000.00 on 07-Sep-26 ATM-CASH WDL. Avl Bal Rs 52,318.40. Call 18002662 for dispute",
+    "received_at": "2026-09-07T11:47:55+05:30",
+    "note": "ATM cash withdrawal has no merchant; the Avl Bal figure is a distractor, not the amount.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "10000.00",
+      "currency": "INR",
+      "merchant": null,
+      "category": "CASH_WITHDRAWAL",
+      "account_last4": "7788",
+      "txn_date": "2026-09-07",
+      "sms_hash": "c460a2bf1dd79df762ac133706a2951e94dd8f012c3aa930a67312e578afa24b"
+    }
+  },
+  {
+    "id": "emi-debit-bajaj",
+    "sender": "BZ-HDFCBK",
+    "body": "Rs.12450.00 debited from HDFC Bank A/c XX2290 on 05-Sep-26 via NACH towards BAJAJ FINANCE EMI (Loan A/c ****8827). Please maintain sufficient balance for next EMI.",
+    "received_at": "2026-09-05T06:10:02+05:30",
+    "note": "EMI via NACH; account_last4 is the debited account (2290), not the loan account (8827).",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "12450.00",
+      "currency": "INR",
+      "merchant": "BAJAJ FINANCE",
+      "category": "EMI_LOANS",
+      "account_last4": "2290",
+      "txn_date": "2026-09-05",
+      "sms_hash": "39e16feeffcc3c50acda90a3c7ff14e121d1a4fc95c2e2ada4153b5f25e37826"
+    }
+  },
+  {
+    "id": "bill-payment-bescom-axis",
+    "sender": "AX-AXISBK",
+    "body": "INR 1876.00 debited from Axis Bank A/c XX6612 on 10-09-26 towards BESCOM ELECTRICITY bill payment. Txn Ref 26091012345678.",
+    "received_at": "2026-09-10T09:25:33+05:30",
+    "note": "Bill payment; dd-mm-yy date (10-09-26 is 10 September 2026).",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "1876.00",
+      "currency": "INR",
+      "merchant": "BESCOM",
+      "category": "BILLS_UTILITIES",
+      "account_last4": "6612",
+      "txn_date": "2026-09-10",
+      "sms_hash": "da4bf08f4ee9a95424307d3445a98af6409a432235f926cfa1a00b4c5e5842d3"
+    }
+  },
+  {
+    "id": "food-delivery-swiggy-upi",
+    "sender": "VM-HDFCBK",
+    "body": "Sent Rs.436.00 From HDFC Bank A/C *3301 To SWIGGY On 12/09/26 Ref 425512348870 Not You? Call 18002586161",
+    "received_at": "2026-09-12T20:41:07+05:30",
+    "note": "Food delivery paid by UPI; dd/mm/yy date; account written as *3301.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "436.00",
+      "currency": "INR",
+      "merchant": "SWIGGY",
+      "category": "FOOD",
+      "account_last4": "3301",
+      "txn_date": "2026-09-12",
+      "sms_hash": "9e80e83cc07f0f2a13eb5bc0b036670fc93673eb3b517a5dabd58ef80dd1097f"
+    }
+  },
+  {
+    "id": "grocery-dmart-sbicard",
+    "sender": "VK-SBICRD",
+    "body": "₹1,842.35 spent on your SBI Card XX5566 at DMART on 14/09/26. Available limit: ₹96,157.65. Not you? Call 1860 180 1290",
+    "received_at": "2026-09-14T18:12:44+05:30",
+    "note": "Uses the rupee sign (non-ASCII, hashed as UTF-8); the available limit is a distractor.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "1842.35",
+      "currency": "INR",
+      "merchant": "DMART",
+      "category": "GROCERIES",
+      "account_last4": "5566",
+      "txn_date": "2026-09-14",
+      "sms_hash": "99fdb208b4427455a2860b40b305e1f9fb82e3e5a67bfaf9b92bc9837d7a6c11"
+    }
+  },
+  {
+    "id": "fuel-indianoil-upi",
+    "sender": "JM-KOTAKB",
+    "body": "Paid Rs.2000 to INDIAN OIL PETROL PUMP via UPI from Kotak A/c XX3309 on 16-Sep-26. UPI Ref 425988817203.",
+    "received_at": "2026-09-16T08:05:19+05:30",
+    "note": "Fuel maps to TRANSPORT; integer amount with no decimals (amount is kept as written, commas removed).",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "2000",
+      "currency": "INR",
+      "merchant": "INDIAN OIL PETROL PUMP",
+      "category": "TRANSPORT",
+      "account_last4": "3309",
+      "txn_date": "2026-09-16",
+      "sms_hash": "6ec0e99556fab198b2a8771e996ac961c84ddbaa4d8b7e32b922959358998b40"
+    }
+  },
+  {
+    "id": "travel-makemytrip-icici",
+    "sender": "AX-ICICIB",
+    "body": "INR 5,432.00 spent using ICICI Bank Card XX9014 on 17-Sep-26 on MAKEMYTRIP INDIA. Avl Limit: INR 71,568.00. To dispute call 18002662",
+    "received_at": "2026-09-17T13:36:28+05:30",
+    "note": "Travel booking on a credit card; thousands comma in the amount.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "5432.00",
+      "currency": "INR",
+      "merchant": "MAKEMYTRIP INDIA",
+      "category": "TRAVEL",
+      "account_last4": "9014",
+      "txn_date": "2026-09-17",
+      "sms_hash": "ade45e58fa5433ea116a26ce380d869ba5255fb0d4482df853ac05afb8399231"
+    }
+  },
+  {
+    "id": "credit-salary-hdfc",
+    "sender": "VM-HDFCBK",
+    "body": "Update: INR 85,000.00 credited to HDFC Bank A/c XX2290 on 01-09-26 by NEFT-ACME TECHNOLOGIES PVT LTD-SALARY SEP. Avl bal: INR 1,12,430.55",
+    "received_at": "2026-09-01T07:58:21+05:30",
+    "note": "Salary credit: not an expense (is_expense false, never published to Kafka); the extractor still fills the fields.",
+    "expected": {
+      "is_expense": false,
+      "txn_type": "CREDIT",
+      "amount": "85000.00",
+      "currency": "INR",
+      "merchant": "ACME TECHNOLOGIES PVT LTD",
+      "category": "OTHER",
+      "account_last4": "2290",
+      "txn_date": "2026-09-01",
+      "sms_hash": "af7e7f4f8f5ca0e8a288f1dfac56b0d2b46c073f4f4d7e055f40a8c8267ec841"
+    }
+  },
+  {
+    "id": "credit-refund-amazon-icici",
+    "sender": "AX-ICICIB",
+    "body": "INR 799.00 credited to your ICICI Bank Card XX9014 on 08-Sep-26 as refund from AMAZON. Ref no. R91827364.",
+    "received_at": "2026-09-08T16:20:05+05:30",
+    "note": "Refund credit: not an expense.",
+    "expected": {
+      "is_expense": false,
+      "txn_type": "CREDIT",
+      "amount": "799.00",
+      "currency": "INR",
+      "merchant": "AMAZON",
+      "category": "SHOPPING",
+      "account_last4": "9014",
+      "txn_date": "2026-09-08",
+      "sms_hash": "3ed69c6e3c5bbbd17a687ebde4b7fff8a8582541d29051cdb6b8bab7682428bb"
+    }
+  },
+  {
+    "id": "otp-hdfc",
+    "sender": "JD-HDFCBK",
+    "body": "482913 is the OTP for txn of Rs.2499.00 at AMAZON on HDFC Bank Card XX4521. Valid for 10 mins. Do not share with anyone. -HDFC Bank",
+    "received_at": "2026-09-15T10:12:09+05:30",
+    "note": "OTP that mentions an amount: still not an expense, amount stays null. Non-transaction messages have null amount/merchant/account_last4/txn_date.",
+    "expected": {
+      "is_expense": false,
+      "txn_type": "OTHER",
+      "amount": null,
+      "currency": "INR",
+      "merchant": null,
+      "category": "OTHER",
+      "account_last4": null,
+      "txn_date": null,
+      "sms_hash": "5b387481fcc3ab6a81f2faae54e44ee409f1bfe6c0574be3f22c2c962bb49d4a"
+    }
+  },
+  {
+    "id": "promo-personal-loan",
+    "sender": "JZ-HDFCBN",
+    "body": "Dear Customer, you are pre-approved for a Personal Loan up to Rs 5,00,000 at 10.49% p.a. Apply now: https://bank.example/pl T&C apply. To opt out SMS STOP to 9090909090",
+    "received_at": "2026-09-11T10:00:00+05:30",
+    "note": "Promotional message containing an amount: not an expense.",
+    "expected": {
+      "is_expense": false,
+      "txn_type": "OTHER",
+      "amount": null,
+      "currency": "INR",
+      "merchant": null,
+      "category": "OTHER",
+      "account_last4": null,
+      "txn_date": null,
+      "sms_hash": "00d1f2e9777ceb9c7a31a199d1ce44c959c481849658400956142c03293638cd"
+    }
+  },
+  {
+    "id": "balance-inquiry-sbi",
+    "sender": "CP-SBIINB",
+    "body": "Your A/C XX1234 Avail Bal is INR 45,210.35 as on 15-Sep-26 11:04. For details visit SBI YONO. -SBI",
+    "received_at": "2026-09-15T11:04:30+05:30",
+    "note": "Balance inquiry response: not an expense.",
+    "expected": {
+      "is_expense": false,
+      "txn_type": "OTHER",
+      "amount": null,
+      "currency": "INR",
+      "merchant": null,
+      "category": "OTHER",
+      "account_last4": null,
+      "txn_date": null,
+      "sms_hash": "06345e8f60eeb24cbff3a392606359fe11d58c3b9ee6093c6338b52d66888e26"
+    }
+  },
+  {
+    "id": "comma-amount-lakh-croma",
+    "sender": "AX-ICICIB",
+    "body": "Rs 1,23,456.50 spent on ICICI Bank Card XX9014 on 15-Sep-26 at CROMA. Avl Limit: Rs 3,04,543.50. To dispute call 18002662",
+    "received_at": "2026-09-15T16:40:02+05:30",
+    "note": "Indian digit grouping (lakhs): Rs 1,23,456.50 must become the amount 123456.50.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "123456.50",
+      "currency": "INR",
+      "merchant": "CROMA",
+      "category": "SHOPPING",
+      "account_last4": "9014",
+      "txn_date": "2026-09-15",
+      "sms_hash": "15a2bd6bc038fa53c58e2f0294ba9113acd7472906d6ee8423b242cd308fa3e6"
+    }
+  },
+  {
+    "id": "rent-neft-hdfc",
+    "sender": "AD-HDFCBK",
+    "body": "Rs.28000.00 debited from HDFC Bank A/c XX2290 on 02-Sep-26 via NEFT to MR SURESH IYER - SEP RENT. UTR N262600098765",
+    "received_at": "2026-09-02T09:02:47+05:30",
+    "note": "Rent paid by NEFT to an individual: RENT beats TRANSFER when the SMS says rent.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "28000.00",
+      "currency": "INR",
+      "merchant": "MR SURESH IYER",
+      "category": "RENT",
+      "account_last4": "2290",
+      "txn_date": "2026-09-02",
+      "sms_hash": "17c58d738e00623615ae26f5f05bf17d6c0b6047edeb20af5f3ea20fafd0504a"
+    }
+  },
+  {
+    "id": "entertainment-bookmyshow-kotak",
+    "sender": "VK-KOTAKB",
+    "body": "Spent Rs.1100.00 on Kotak Credit Card XX7740 at BOOKMYSHOW on 13-Sep-26. Avl limit Rs.48,900.00. Not you? Call 18602662666",
+    "received_at": "2026-09-13T17:55:36+05:30",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "1100.00",
+      "currency": "INR",
+      "merchant": "BOOKMYSHOW",
+      "category": "ENTERTAINMENT",
+      "account_last4": "7740",
+      "txn_date": "2026-09-13",
+      "sms_hash": "a9b92dc5a145ae5456d6cc9e37e8825f3a35a9c208fd4f677e09e27ba95c0645"
+    }
+  },
+  {
+    "id": "health-apollo-axis",
+    "sender": "AX-AXISBK",
+    "body": "INR 742.50 debited from Axis Bank A/c XX6612 on 18-09-26 at APOLLO PHARMACY via UPI. Txn Ref 426012348811.",
+    "received_at": "2026-09-18T21:15:09.250+05:30",
+    "note": "received_at carries milliseconds (.250): epoch_ms must keep them.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "742.50",
+      "currency": "INR",
+      "merchant": "APOLLO PHARMACY",
+      "category": "HEALTH",
+      "account_last4": "6612",
+      "txn_date": "2026-09-18",
+      "sms_hash": "5be768572b949b008413bee28db5c6899e86d4f9d99ad01ae2ae8a4ed7444257"
+    }
+  },
+  {
+    "id": "education-udemy-hdfc",
+    "sender": "HDFCBK",
+    "body": "Thank you for using your HDFC Bank Credit Card ending 4521 for Rs 4,999.00 at UDEMY on 09-09-2026 22:31:48.",
+    "received_at": "2026-09-09T22:31:50+05:30",
+    "note": "Card written as 'ending 4521'; dd-mm-yyyy date.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "4999.00",
+      "currency": "INR",
+      "merchant": "UDEMY",
+      "category": "EDUCATION",
+      "account_last4": "4521",
+      "txn_date": "2026-09-09",
+      "sms_hash": "70256062e466f9d34b706e023b195d4ecdc0b33901f82243a20727b672d984ec"
+    }
+  },
+  {
+    "id": "investment-sip-icici",
+    "sender": "AX-ICICIB",
+    "body": "ICICI Bank Acct XX7788 debited for Rs 5000.00 on 10-Sep-26 towards SIP - ICICI PRUDENTIAL MUTUAL FUND (NACH). Ref no. NACH8827361.",
+    "received_at": "2026-09-10T08:00:12+05:30",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "5000.00",
+      "currency": "INR",
+      "merchant": "ICICI PRUDENTIAL MUTUAL FUND",
+      "category": "INVESTMENT",
+      "account_last4": "7788",
+      "txn_date": "2026-09-10",
+      "sms_hash": "7b1dba67ba63afca429a759ae40ea241de134a759ab863a8c4f6e8a3a08f198b"
+    }
+  },
+  {
+    "id": "other-card-fee-axis",
+    "sender": "AD-AXISBK",
+    "body": "INR 236.00 debited from Axis Bank A/c XX6612 on 19-09-26 towards ANNUAL DEBIT CARD FEE incl. GST.",
+    "received_at": "2026-09-19T02:14:00+05:30",
+    "note": "A real expense that fits no specific category: OTHER.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "236.00",
+      "currency": "INR",
+      "merchant": "AXIS BANK",
+      "category": "OTHER",
+      "account_last4": "6612",
+      "txn_date": "2026-09-19",
+      "sms_hash": "3c6a1c0837b925ab4b7f77307f218e701f687ca890f89e4e7f69b96dc7369fce"
+    }
+  },
+  {
+    "id": "card-debit-myntra-duplicate",
+    "sender": "HDFCBK",
+    "body": "Spent Rs.2349.00 On HDFC Bank Card XX4521 At MYNTRA On 2026-09-03:14:22:10.Not You? To Block+Reissue Call 18002586161",
+    "received_at": "2026-09-03T14:22:41+05:30",
+    "duplicate_of": "card-debit-myntra",
+    "note": "Exact duplicate (same sender, body, received_at): must hash identically and be stored once.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "2349.00",
+      "currency": "INR",
+      "merchant": "MYNTRA",
+      "category": "SHOPPING",
+      "account_last4": "4521",
+      "txn_date": "2026-09-03",
+      "sms_hash": "b52a85c320dffcce740ce17b021e4f7881f25c7e14969e14b3bb6e0cfe18685e"
+    }
+  },
+  {
+    "id": "food-delivery-swiggy-upi-whitespace-variant",
+    "sender": "vm-hdfcbk",
+    "body": "  Sent  Rs.436.00 From HDFC Bank A/C *3301 To SWIGGY On 12/09/26\n Ref 425512348870   Not You? Call 18002586161\n",
+    "received_at": "2026-09-12T20:41:07+05:30",
+    "duplicate_of": "food-delivery-swiggy-upi",
+    "note": "Same message with lower-case sender and extra spaces/newlines: sender is upper-cased and body whitespace collapsed before hashing, so the hash is identical.",
+    "expected": {
+      "is_expense": true,
+      "txn_type": "DEBIT",
+      "amount": "436.00",
+      "currency": "INR",
+      "merchant": "SWIGGY",
+      "category": "FOOD",
+      "account_last4": "3301",
+      "txn_date": "2026-09-12",
+      "sms_hash": "9e80e83cc07f0f2a13eb5bc0b036670fc93673eb3b517a5dabd58ef80dd1097f"
+    }
+  }
+]

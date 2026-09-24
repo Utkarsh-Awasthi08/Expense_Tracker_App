@@ -1,0 +1,68 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: gatewayService
+  cloud:
+    gateway:
+      server:
+        webflux:
+          # Global upstream timeouts; a route can override them through metadata (see the sms route).
+          httpclient:
+            connect-timeout: 5000
+            response-timeout: 30s
+          routes:
+            # Public auth endpoints. Listed first for readability; the security chain, not the route,
+            # decides what is public (see SecurityConfig / PublicRoutes).
+            # signup/login stay listed alongside the OTP paths: authService has not shipped the OTP controllers
+            # (or the coordinated DB migration) yet, so signup/login are still the only auth entry points that
+            # actually work. Drop them once authService ships its half of the OTP migration (see PublicRoutes).
+            - id: auth-public
+              uri: ${AUTH_SERVICE_URL:http://localhost:9898}
+              predicates:
+                - Path=/auth/v1/signup,/auth/v1/login,/auth/v1/otp/request,/auth/v1/otp/verify,/auth/v1/refreshToken,/auth/v1/logout
+            - id: auth
+              uri: ${AUTH_SERVICE_URL:http://localhost:9898}
+              predicates:
+                - Path=/auth/v1/**
+            - id: user
+              uri: ${USER_SERVICE_URL:http://localhost:8888}
+              predicates:
+                - Path=/user/v1/**
+            - id: expense
+              uri: ${EXPENSE_SERVICE_URL:http://localhost:9820}
+              predicates:
+                - Path=/expense/v1/**
+            # SMS ingest is proxied to dsService (LLM extraction, up to 100 messages per batch), so it gets a long timeout.
+            - id: sms
+              uri: ${DS_SERVICE_URL:http://localhost:8010}
+              predicates:
+                - Path=/sms/v1/**
+              filters:
+                # $\{seg} keeps Spring's property resolver away from the literal; the filter turns $\ back into $.
+                - RewritePath=/sms/v1/(?<seg>.*), /v1/ds/$\{seg}
+              metadata:
+                response-timeout: 120000
+                connect-timeout: 5000
+            - id: manual
+              uri: ${DS_SERVICE_URL:http://localhost:8010}
+              predicates:
+                - Path=/manual/v1/**
+              filters:
+                - RewritePath=/manual/v1/(?<seg>.*), /v1/ds/$\{seg}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+gateway:
+  jwt:
+    # JWKS is fetched lazily on the first token, so the gateway boots while authService is down.
+    jwks-uri: ${JWT_JWKS_URI:http://localhost:9898/auth/v1/.well-known/jwks.json}
+    issuer: ${JWT_ISSUER:expense-tracker-auth}

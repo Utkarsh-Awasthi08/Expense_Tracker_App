@@ -1,0 +1,6 @@
+# Version catalog. Dependency versions come from the Spring Boot BOM (io.spring.dependency-management),
+# so nothing is pinned here. The generated third-party entries (including junit 4) were removed.
+
+[versions]
+
+[libraries]

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://expense-tracker.local/contracts/schemas/expense.parsed.v1.schema.json",
+  "title": "expense.parsed.v1",
+  "description": "Kafka topic expense.parsed.v1 (key = user_id, 3 partitions, .DLT). Published by dsService, consumed by expenseService. dsService publishes only when is_expense is true and amount > 0; the consumer drops is_expense=false. An unknown schema_version is non-retryable (straight to the DLT). Producers must not add fields (additionalProperties: false).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "user_id",
+    "sms_hash",
+    "sender",
+    "sms_received_at",
+    "is_expense",
+    "txn_type",
+    "amount",
+    "currency",
+    "merchant",
+    "category",
+    "account_last4",
+    "txn_date"
+  ],
+  "properties": {
+    "schema_version": {
+      "description": "Contract version. Anything other than 1 is non-retryable for consumers.",
+      "type": "integer",
+      "const": 1
+    },
+    "user_id": {
+      "description": "Owner of the expense (JWT sub, forwarded as X-User-Id). Also the Kafka record key.",
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "sms_hash": {
+      "description": "sha256_hex(upper(sender)|epoch_ms(received_at)|\" \".join(body.split())). Dedup key is (user_id, sms_hash).",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sender": {
+      "description": "SMS sender id as received, e.g. HDFCBK or AX-ICICIB.",
+      "type": "string",
+      "minLength": 1
+    },
+    "sms_received_at": {
+      "description": "When the SMS was received on the device (RFC 3339 date-time).",
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_expense": {
+      "description": "The extractor's verdict. Producers only publish true; consumers drop false.",
+      "type": "boolean"
+    },
+    "txn_type": {
+      "type": "string",
+      "enum": ["DEBIT", "CREDIT", "OTHER"]
+    },
+    "amount": {
+      "description": "Decimal string, never a JSON number. Producers only publish amount > 0.",
+      "type": "string",
+      "pattern": "^\\d+(\\.\\d{1,2})?$"
+    },
+    "currency": {
+      "description": "ISO 4217 code.",
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "merchant": {
+      "type": ["string", "null"]
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "FOOD",
+        "GROCERIES",
+        "TRANSPORT",
+        "SHOPPING",
+        "BILLS_UTILITIES",
+        "ENTERTAINMENT",
+        "HEALTH",
+        "TRAVEL",
+        "EDUCATION",
+        "RENT",
+        "EMI_LOANS",
+        "INVESTMENT",
+        "TRANSFER",
+        "CASH_WITHDRAWAL",
+        "OTHER"
+      ]
+    },
+    "account_last4": {
+      "description": "Last four digits of the account or card, or null when the SMS does not state them.",
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}$"
+    },
+    "txn_date": {
+      "description": "Transaction date (calendar date), or null when unknown.",
+      "type": ["string", "null"],
+      "format": "date"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://expense-tracker.local/contracts/schemas/user.created.v1.schema.json",
+  "title": "user.created.v1",
+  "description": "Kafka topic user.created.v1 (key = user_id, .DLT). Published by authService through its transactional outbox, consumed by userService. The consumer is create-only: insert if absent, else no-op, so a stale event can never overwrite PUT /user/v1/me edits. Producers must not add fields (additionalProperties: false).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "user_id",
+    "username",
+    "first_name",
+    "last_name",
+    "phone_number",
+    "email",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "description": "Contract version. Anything other than 1 is non-retryable for consumers.",
+      "type": "integer",
+      "const": 1
+    },
+    "event_id": {
+      "description": "Unique id of this event (outbox row id).",
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "user_id": {
+      "description": "The new user's id (JWT sub). Also the Kafka record key.",
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "username": {
+      "description": "Trimmed, lowercased login name.",
+      "type": "string",
+      "minLength": 1
+    },
+    "first_name": {
+      "type": ["string", "null"]
+    },
+    "last_name": {
+      "type": ["string", "null"]
+    },
+    "phone_number": {
+      "description": "A string, never a number.",
+      "type": ["string", "null"]
+    },
+    "email": {
+      "type": ["string", "null"]
+    },
+    "created_at": {
+      "description": "When the user was created (RFC 3339 date-time).",
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

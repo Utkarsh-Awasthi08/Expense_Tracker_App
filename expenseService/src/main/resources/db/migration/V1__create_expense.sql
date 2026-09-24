@@ -1,0 +1,20 @@
+CREATE TABLE expense (
+    id              BIGINT        NOT NULL AUTO_INCREMENT,
+    external_id     VARCHAR(36)   NOT NULL,
+    user_id         VARCHAR(36)   NOT NULL,
+    sms_hash        VARCHAR(64)   NULL,
+    sms_received_at DATETIME(6)   NULL,
+    amount          DECIMAL(19,2) NOT NULL,
+    currency        VARCHAR(3)    NOT NULL DEFAULT 'INR',
+    merchant        VARCHAR(255)  NULL,
+    category        VARCHAR(32)   NOT NULL DEFAULT 'OTHER',
+    txn_type        VARCHAR(16)   NOT NULL DEFAULT 'DEBIT',
+    account_last4   VARCHAR(4)    NULL,
+    txn_date        DATE          NOT NULL,
+    created_at      DATETIME(6)   NOT NULL,
+    updated_at      DATETIME(6)   NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_expense_external_id (external_id),
+    UNIQUE KEY uq_expense_user_sms (user_id, sms_hash),
+    INDEX idx_expense_user_txn_date (user_id, txn_date)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;

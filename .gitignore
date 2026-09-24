@@ -1,0 +1,48 @@
+# --- Secrets (never commit) ---
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.p12
+*.jks
+
+# --- Nested repository: the mobile app keeps its own git history ---
+myExpenseTracker/
+
+# --- OS / IDE ---
+.DS_Store
+.idea/
+*.iml
+.vscode/
+.claude/settings.local.json
+
+# --- Java / Gradle ---
+.gradle/
+build/
+bin/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+*.class
+*.log
+hs_err_pid*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+venv/
+dsenv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Node (for any tooling at the root) ---
+node_modules/
+
+# --- Test output / scratch ---
+test-results/
+*.tar.gz
