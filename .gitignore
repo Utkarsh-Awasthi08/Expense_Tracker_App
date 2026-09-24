@@ -9,7 +9,6 @@ secrets/
 *.jks
 
 # --- Nested repository: the mobile app keeps its own git history ---
-myExpenseTracker/
 
 # --- OS / IDE ---
 .DS_Store
