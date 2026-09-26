@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from './config';
 
 class ExpenseService {
-    private async getHeaders(): Promise<HeadersInit> {
+    private async getHeaders(): Promise<Record<string, string>> {
         const accessToken = await AsyncStorage.getItem('accessToken');
         return {
             Accept: 'application/json',
@@ -31,7 +31,7 @@ class ExpenseService {
 
     async getExpenses(from?: string, to?: string): Promise<any[]> {
         try {
-            let url = `${API_BASE_URL}/expense/v1/expenses?size=500`;
+            let url = `${API_BASE_URL}/expense/v1/expenses?size=200`;
             if (from) url += `&from=${from}`;
             if (to) url += `&to=${to}`;
             

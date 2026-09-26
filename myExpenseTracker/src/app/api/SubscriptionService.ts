@@ -10,7 +10,7 @@ export interface Subscription {
 }
 
 class SubscriptionService {
-    private async getHeaders(): Promise<HeadersInit> {
+    private async getHeaders(): Promise<Record<string, string>> {
         const accessToken = await AsyncStorage.getItem('accessToken');
         return {
             Accept: 'application/json',

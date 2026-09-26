@@ -27,6 +27,7 @@ import java.util.HexFormat;
 import java.util.List;
 import java.util.Optional;
 
+import org.example.EventProducer.UserInfoProducer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,7 +47,7 @@ class OtpServiceTest {
     private final SmsProvider smsProvider = mock(SmsProvider.class);
     private final JwtService jwtService = mock(JwtService.class);
     private final RefreshTokenService refreshTokenService = mock(RefreshTokenService.class);
-
+    private final UserInfoProducer userInfoProducer = mock(UserInfoProducer.class);
     private final Instant fixedNow = Instant.parse("2026-09-24T10:00:00Z");
     private final Clock clock = Clock.fixed(fixedNow, ZoneOffset.UTC);
     private final OtpProperties properties = new OtpProperties(300, 60, 5, 5, "91");
@@ -56,7 +57,7 @@ class OtpServiceTest {
     @BeforeEach
     void setUp() {
         otpService = new OtpService(otpChallengeRepository, userRepository, roleRepository,
-                smsProvider, jwtService, refreshTokenService, properties, clock);
+                smsProvider, jwtService, refreshTokenService, userInfoProducer, properties, clock);
     }
 
     private static String sha256Hex(String value) {

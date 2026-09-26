@@ -11,6 +11,8 @@ import org.example.Entities.UserRole;
 import org.example.Repository.OtpChallengeRepository;
 import org.example.Repository.RoleRepository;
 import org.example.Repository.UserRepository;
+import org.example.EventProducer.UserInfoEvent;
+import org.example.EventProducer.UserInfoProducer;
 import org.example.Request.InputNormalizer;
 import org.example.Response.JwtResponseDTO;
 import org.example.Service.JwtService;
@@ -61,6 +63,7 @@ public class OtpService {
     private final SmsProvider smsProvider;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final UserInfoProducer userInfoProducer;
     private final OtpProperties properties;
     private final Clock clock;
     private final SecureRandom secureRandom = new SecureRandom();
@@ -172,7 +175,23 @@ public class OtpService {
                 .orElseThrow(() -> new IllegalStateException(DEFAULT_ROLE + " is not seeded; run the Flyway migrations"));
         UserInfo user = new UserInfo(UUID.randomUUID().toString(), phone, now.truncatedTo(ChronoUnit.MICROS));
         user.getRoles().add(role);
-        return userRepository.saveAndFlush(user);
+        user = userRepository.saveAndFlush(user);
+
+        long phoneAsLong = 0L;
+        try {
+            phoneAsLong = Long.parseLong(phone.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException ignored) {}
+
+        UserInfoEvent event = UserInfoEvent.builder()
+                .userId(user.getUserId())
+                .phoneNumber(phoneAsLong)
+                .firstName(null)
+                .lastName(null)
+                .email(null)
+                .build();
+        userInfoProducer.sendEventToKafka(event);
+
+        return user;
     }
 
     private String normalizeOrThrow(String raw) {

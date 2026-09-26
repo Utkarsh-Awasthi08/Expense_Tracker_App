@@ -26,7 +26,7 @@ export interface UpdateProfileRequest {
 }
 
 class UserService {
-    private async getHeaders(): Promise<HeadersInit> {
+    private async getHeaders(): Promise<Record<string, string>> {
         const accessToken = await AsyncStorage.getItem('accessToken');
         return {
             Accept: 'application/json',
@@ -35,14 +35,20 @@ class UserService {
         };
     }
 
-    async getUserProfile(): Promise<UserInfoDTO | null> {
+    async getUserProfile(retries = 3): Promise<UserInfoDTO | null> {
         try {
             const response = await fetch(`${API_BASE_URL}/user/v1/me`, {
                 method: 'GET',
                 headers: await this.getHeaders(),
             });
+            if (response.status === 404 && retries > 0) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                return this.getUserProfile(retries - 1);
+            }
             if (!response.ok) {
-                console.error('Failed to fetch user profile, status:', response.status);
+                if (response.status !== 404 && response.status !== 401) {
+                    console.error('Failed to fetch user profile, status:', response.status);
+                }
                 return null;
             }
             return await response.json();
