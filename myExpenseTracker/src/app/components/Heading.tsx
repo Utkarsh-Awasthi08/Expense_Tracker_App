@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     marginVertical: theme.spacing.md,
   },
   headingBox: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surface.primary,
     borderRadius: theme.borderRadius.lg,
     padding: theme.spacing.md,
   },

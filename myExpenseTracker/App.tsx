@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/app/pages/Home';
 import Login from './src/app/pages/Login';
 import Profile from './src/app/pages/Profile';
+import Onboarding from './src/app/pages/Onboarding';
 import { enableScreens } from 'react-native-screens';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -12,6 +13,7 @@ enableScreens(true);
 
 export type RootStackParamList = {
   Login: undefined;
+  Onboarding: undefined;
   Home: undefined;
   Profile: undefined;
 };
@@ -26,6 +28,7 @@ function App(): React.JSX.Element {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {/* Login handles both sign-in and first-time account creation via OTP */}
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen
               name="Profile"

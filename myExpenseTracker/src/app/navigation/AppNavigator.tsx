@@ -8,7 +8,6 @@ import Spends from '../pages/Spends';
 export type RootStackParamList = {
   Home: undefined;
   Profile: undefined;
-  Spends: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -35,7 +34,6 @@ const AppNavigator = () => {
             },
           }}
         />
-        <Stack.Screen name="Spends" component={Spends} />
       </Stack.Navigator>
     </NavigationContainer>
   );

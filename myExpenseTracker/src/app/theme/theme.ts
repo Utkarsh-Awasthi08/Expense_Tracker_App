@@ -129,4 +129,4 @@ export const theme = {
         height: 49,
       },
     }
-  };
+  } as const;

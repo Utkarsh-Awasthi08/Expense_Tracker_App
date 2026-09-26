@@ -3,11 +3,17 @@ import React from 'react';
 import { Box } from '@gluestack-ui/themed';
 import CustomText from './CustomText';
 
-const CustomBox = ({style = {}, children, ...props}) => {
+interface CustomBoxProps {
+  style?: any;
+  children?: React.ReactNode;
+  [key: string]: any;
+}
+
+const CustomBox = ({style = {}, children, ...props}: CustomBoxProps) => {
     return (
       <View>
         <Box style={[styles.headingContainer, style.mainBox, style.styles]}>
-          <View style={styles.textColor}>{children}</View>
+          <View>{children}</View>
         </Box>
         <Box style={[styles.shadowContainer, style.shadowBox, style.styles]} />
       </View>
@@ -24,9 +30,7 @@ const CustomBox = ({style = {}, children, ...props}) => {
       position: 'relative',
       backgroundColor: 'black',
     },
-    textColor: {
-      color: 'white',
-    },
+
     shadowContainer: {
       position: 'absolute',
       top: 5,
@@ -37,10 +41,10 @@ const CustomBox = ({style = {}, children, ...props}) => {
       zIndex: -1,
     },
     mainBox: {
-      borderColor: (style) => style.mainBox?.borderColor || 'black',
-      backgroundColor: (style) => style.mainBox?.backgroundColor || 'black',
+      borderColor: 'black',
+      backgroundColor: 'black',
     },
     shadowBox: {
-      backgroundColor: (style) => style.shadowBox?.backgroundColor || 'gray',
+      backgroundColor: 'gray',
     },
   });
