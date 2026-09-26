@@ -96,7 +96,20 @@ const Login = ({ navigation }: { navigation: any }) => {
         const data = await res.json();
         await AsyncStorage.setItem('accessToken', data.accessToken);
         await AsyncStorage.setItem('refreshToken', data.token);
-        navigation.replace('Home');
+
+        // Check if this is a new user (no name set yet)
+        let isNewUser = false;
+        try {
+          const profileRes = await fetch(`${SERVER_BASE_URL}/user/v1/me`, {
+            headers: { Authorization: 'Bearer ' + data.accessToken },
+          });
+          if (profileRes.ok) {
+            const profile = await profileRes.json();
+            isNewUser = !profile.first_name;
+          }
+        } catch (_) {}
+
+        navigation.replace(isNewUser ? 'Onboarding' : 'Home');
       } else { setError('Invalid or expired code.'); setOtp(''); }
     } catch (_) { setError('Network error.'); }
     finally { setLoading(false); }
@@ -107,7 +120,7 @@ const Login = ({ navigation }: { navigation: any }) => {
       <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
         <View style={styles.header}>
           <View style={styles.logoCircle}><Text style={styles.logoEmoji}>💰</Text></View>
-          <Text style={styles.appName}>ExpenseTracker</Text>
+          <Text style={styles.appName}>SpendWise</Text>
           <Text style={styles.tagline}>Smart spending, smarter saving</Text>
         </View>
         <View style={styles.card}>

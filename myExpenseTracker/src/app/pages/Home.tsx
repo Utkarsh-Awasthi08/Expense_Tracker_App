@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {SafeAreaView, StyleSheet, Text, View, ScrollView} from 'react-native';
-import {GluestackUIProvider} from '@gluestack-ui/themed';
-import {config} from '@gluestack-ui/config';
+import { SafeAreaView, StyleSheet, View, ScrollView, StatusBar } from 'react-native';
 import ExpenseTrackerGraph from './ExpenseTrackerGraph';
 import SpendsInsights from './SpendsInsights';
 import Spends from './Spends';
@@ -15,7 +13,6 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [budget, setBudget] = useState<number | null>(null);
   const [spent, setSpent] = useState<number>(0);
-  
   const [filterType, setFilterType] = useState<'7days' | 'month' | 'all'>('month');
   const [sortOrder, setSortOrder] = useState<'date' | 'price'>('date');
 
@@ -23,8 +20,6 @@ const Home = () => {
     setIsLoading(true);
     try {
       let fromDate: string | undefined;
-      let toDate: string | undefined;
-
       const now = new Date();
       if (filterType === '7days') {
         const sevenDaysAgo = new Date(now.setDate(now.getDate() - 7));
@@ -34,8 +29,7 @@ const Home = () => {
         fromDate = firstDay.toISOString().split('T')[0];
       }
 
-      const data = await ExpenseService.getExpenses(fromDate, toDate);
-      
+      const data = await ExpenseService.getExpenses(fromDate, undefined);
       let transformedExpenses: ExpenseDto[] = data.map((expense: any, index: number) => ({
         key: index + 1,
         amount: expense.amount,
@@ -50,15 +44,12 @@ const Home = () => {
       }
 
       setExpenses(transformedExpenses);
-      
+
       const profile = await UserService.getUserProfile();
-      if (profile && profile.monthly_budget) {
-        setBudget(profile.monthly_budget);
-      }
-      
+      if (profile?.monthly_budget) setBudget(profile.monthly_budget);
+
       const totalSpent = await ExpenseService.getCurrentMonthTotal();
       setSpent(totalSpent);
-
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
     } finally {
@@ -71,64 +62,54 @@ const Home = () => {
   }, [filterType, sortOrder]);
 
   return (
-    <GluestackUIProvider config={config}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          <Nav />
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.contentContainer}>
-              <View style={styles.graphContainer}>
-                <ExpenseTrackerGraph expenses={expenses} />
-              </View>
-              <View style={styles.insightsContainer}>
-                <SpendsInsights expenses={expenses} budget={budget} spent={spent} />
-              </View>
-            </View>
-            <View style={styles.spendsContainer}>
-              <Spends 
-                expenses={expenses} 
-                isLoading={isLoading} 
-                budget={budget} 
-                spent={spent}
-                filterType={filterType}
-                setFilterType={setFilterType}
-                sortOrder={sortOrder}
-                setSortOrder={setSortOrder}
-                onRefresh={fetchExpenses}
-              />
-            </View>
-          </ScrollView>
-        </View>
-      </SafeAreaView>
-    </GluestackUIProvider>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
+      <View style={styles.container}>
+        <Nav />
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
+          <View style={styles.graphSection}>
+            <ExpenseTrackerGraph expenses={expenses} />
+          </View>
+          <View style={styles.insightsSection}>
+            <SpendsInsights expenses={expenses} budget={budget} spent={spent} />
+          </View>
+          <Spends
+            expenses={expenses}
+            isLoading={isLoading}
+            budget={budget}
+            spent={spent}
+            filterType={filterType}
+            setFilterType={setFilterType}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            onRefresh={fetchExpenses}
+          />
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#0f172a',
   },
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    flexDirection: 'column',
+    backgroundColor: '#0f172a',
   },
-  contentContainer: {
-    flexDirection: 'column', // Changed to column so graph takes full width
-    alignItems: 'stretch',
-    marginTop: 20,
-  },
-  graphContainer: {
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  insightsContainer: {
-    marginBottom: 10,
-  },
-  spendsContainer: {
-    marginTop: 10,
+  scroll: {
     flex: 1,
+  },
+  graphSection: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  insightsSection: {
+    paddingTop: 8,
+    paddingBottom: 4,
   },
 });
 

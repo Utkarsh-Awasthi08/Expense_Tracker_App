@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import {
   View,
   StyleSheet,
@@ -9,11 +11,12 @@ import {
   Modal,
   TextInput,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import CustomText from '../components/CustomText';
 import { theme } from '../theme/theme';
 import { Icon } from '@gluestack-ui/themed';
-import { Camera, ChevronRight, User, Phone, Mail, Bell, Lock, Moon, X, Check, Wallet } from 'lucide-react-native';
+import { Camera, ChevronRight, User, Phone, Mail, Bell, Lock, Moon, X, Check, Wallet, LogOut } from 'lucide-react-native';
 import UserService, { UserInfoDTO, UpdateProfileRequest } from '../api/UserService';
 import SubscriptionService, { Subscription } from '../api/SubscriptionService';
 import { Trash2, Plus } from 'lucide-react-native';
@@ -33,11 +36,12 @@ const ProfileItem: React.FC<ProfileItemProps> = ({ icon, label, value }) => (
       <CustomText style={styles.label}>{label}</CustomText>
       <CustomText style={styles.value}>{value || 'Not set'}</CustomText>
     </View>
-    <Icon as={ChevronRight} color={theme.colors.text.secondary} size="sm" />
+    <ChevronRight color={theme.colors.text.secondary} size={20} />
   </View>
 );
 
 const Profile = () => {
+  const navigation = useNavigation<any>();
   const [user, setUser] = useState<UserInfoDTO | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -95,7 +99,7 @@ const Profile = () => {
       setIsEditing(false);
       fetchProfile();
     } else {
-      alert("Failed to save profile.");
+      Alert.alert("Failed to save profile.");
     }
   };
 
@@ -109,13 +113,21 @@ const Profile = () => {
       setSubForm({ currency: 'INR' });
       fetchProfile();
     } else {
-      alert("Failed to save subscription.");
+      Alert.alert("Failed to save subscription.");
     }
   };
 
   const handleDeleteSub = async (id: number) => {
     const success = await SubscriptionService.deleteSubscription(id);
     if (success) fetchProfile();
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('accessToken');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
   };
 
   if (loading) {
@@ -128,8 +140,20 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <View style={[styles.container, styles.center]}>
-        <CustomText>Error loading profile</CustomText>
+      <View style={[styles.container, styles.center, { paddingHorizontal: 24 }]}>
+        <CustomText style={{ fontSize: 64, marginBottom: 16 }}>🔒</CustomText>
+        <CustomText style={{ fontSize: 20, fontWeight: '700', color: theme.colors.text.primary, marginBottom: 8 }}>
+          Session Expired
+        </CustomText>
+        <CustomText style={{ fontSize: 15, color: theme.colors.text.secondary, textAlign: 'center', marginBottom: 32, lineHeight: 22 }}>
+          Your session has expired or you are not logged in. Please sign in again to view your profile.
+        </CustomText>
+        <TouchableOpacity 
+          style={{ backgroundColor: theme.colors.primary, paddingHorizontal: 32, paddingVertical: 14, borderRadius: 12, width: '100%', alignItems: 'center' }}
+          onPress={handleLogout}
+        >
+          <CustomText style={{ color: '#fff', fontSize: 16, fontWeight: '700' }}>Go to Login</CustomText>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -143,7 +167,7 @@ const Profile = () => {
             style={styles.profileImage}
           />
           <TouchableOpacity style={styles.editButton} onPress={() => startEditing()}>
-            <Icon as={Camera} color={theme.colors.primary} size="sm" />
+            <Camera color={theme.colors.primary} size={20} />
           </TouchableOpacity>
         </View>
         <CustomText style={styles.name}>
@@ -166,47 +190,68 @@ const Profile = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.card}>
-            <ProfileItem
-              icon={<Icon as={User} color={theme.colors.primary} size="sm" />}
-              label="Name"
-              value={user.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : ''}
-            />
-            <ProfileItem
-              icon={<Icon as={Phone} color={theme.colors.primary} size="sm" />}
-              label="Phone"
-              value={formatPhoneNumber(user.phone_number)}
-            />
-            <ProfileItem
-              icon={<Icon as={Mail} color={theme.colors.primary} size="sm" />}
-              label="Email"
-              value={user.email || ''}
-            />
-            <ProfileItem
-              icon={<Icon as={Wallet} color={theme.colors.primary} size="sm" />}
-              label="Monthly Budget"
-              value={user.monthly_budget ? `${user.default_currency || 'INR'} ${user.monthly_budget}` : 'Not set'}
-            />
+            <TouchableOpacity onPress={() => startEditing()}>
+              <ProfileItem
+                icon={<User color={theme.colors.primary} size={20} />}
+                label="Name"
+                value={user.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : ''}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => startEditing()}>
+              <ProfileItem
+                icon={<Phone color={theme.colors.primary} size={20} />}
+                label="Phone"
+                value={formatPhoneNumber(user.phone_number)}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => startEditing()}>
+              <ProfileItem
+                icon={<Mail color={theme.colors.primary} size={20} />}
+                label="Email"
+                value={user.email || ''}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => startEditing()}>
+              <ProfileItem
+                icon={<Wallet color={theme.colors.primary} size={20} />}
+                label="Monthly Budget"
+                value={user.monthly_budget ? `${user.default_currency || 'INR'} ${user.monthly_budget}` : 'Not set'}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.section}>
           <CustomText style={styles.sectionTitle}>Settings</CustomText>
           <View style={styles.card}>
-            <ProfileItem
-              icon={<Icon as={Bell} color={theme.colors.primary} size="sm" />}
-              label="Notifications"
-              value="On"
-            />
-            <ProfileItem
-              icon={<Icon as={Lock} color={theme.colors.primary} size="sm" />}
-              label="Privacy"
-              value="View Settings"
-            />
-            <ProfileItem
-              icon={<Icon as={Moon} color={theme.colors.primary} size="sm" />}
-              label="Dark Mode"
-              value="System"
-            />
+            <TouchableOpacity onPress={() => Alert.alert('Coming Soon', 'Notifications settings will be available in a future update.')}>
+              <ProfileItem
+                icon={<Bell color={theme.colors.primary} size={20} />}
+                label="Notifications"
+                value="On"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Alert.alert('Coming Soon', 'Privacy settings will be available in a future update.')}>
+              <ProfileItem
+                icon={<Lock color={theme.colors.primary} size={20} />}
+                label="Privacy"
+                value="View Settings"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Alert.alert('Coming Soon', 'Dark Mode support will be available in a future update.')}>
+              <ProfileItem
+                icon={<Moon color={theme.colors.primary} size={20} />}
+                label="Dark Mode"
+                value="System"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLogout}>
+              <ProfileItem
+                icon={<LogOut color="#EF4444" size={20} />}
+                label="Logout"
+                value="Sign out of your account"
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -214,7 +259,7 @@ const Profile = () => {
           <View style={styles.sectionHeader}>
             <CustomText style={styles.sectionTitle}>Subscriptions</CustomText>
             <TouchableOpacity onPress={() => setIsSubModalVisible(true)}>
-              <Icon as={Plus} color={theme.colors.primary} size="sm" />
+              <Plus color={theme.colors.primary} size={20} />
             </TouchableOpacity>
           </View>
           <View style={styles.card}>
@@ -230,7 +275,7 @@ const Profile = () => {
                     <CustomText style={styles.label}>{sub.currency} {sub.amount} (Renews on {sub.billingDay})</CustomText>
                   </View>
                   <TouchableOpacity onPress={() => sub.id && handleDeleteSub(sub.id)}>
-                    <Icon as={Trash2} color="#EF4444" size="sm" />
+                    <Trash2 color="#EF4444" size={20} />
                   </TouchableOpacity>
                 </View>
               ))
@@ -244,14 +289,14 @@ const Profile = () => {
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <TouchableOpacity onPress={() => setIsEditing(false)}>
-                <Icon as={X} color={theme.colors.text.primary} size="md" />
+                <X color={theme.colors.text.primary} size={24} />
               </TouchableOpacity>
               <CustomText style={styles.modalTitle}>Edit Profile</CustomText>
               <TouchableOpacity onPress={handleSave} disabled={saving}>
                 {saving ? (
                   <ActivityIndicator size="small" color={theme.colors.primary} />
                 ) : (
-                  <Icon as={Check} color={theme.colors.primary} size="md" />
+                  <Check color={theme.colors.primary} size={24} />
                 )}
               </TouchableOpacity>
             </View>
@@ -310,14 +355,14 @@ const Profile = () => {
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <TouchableOpacity onPress={() => setIsSubModalVisible(false)}>
-                <Icon as={X} color={theme.colors.text.primary} size="md" />
+                <X color={theme.colors.text.primary} size={24} />
               </TouchableOpacity>
               <CustomText style={styles.modalTitle}>Add Subscription</CustomText>
               <TouchableOpacity onPress={handleSaveSub} disabled={subSaving || !subForm.platform || !subForm.amount || !subForm.billingDay}>
                 {subSaving ? (
                   <ActivityIndicator size="small" color={theme.colors.primary} />
                 ) : (
-                  <Icon as={Check} color={theme.colors.primary} size="md" />
+                  <Check color={theme.colors.primary} size={24} />
                 )}
               </TouchableOpacity>
             </View>

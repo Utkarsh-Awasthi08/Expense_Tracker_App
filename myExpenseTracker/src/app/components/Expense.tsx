@@ -1,4 +1,4 @@
-import {StyleSheet, View, Image, Platform, TouchableOpacity, Modal, TextInput, ActivityIndicator} from 'react-native';
+import {StyleSheet, View, Image, Platform, TouchableOpacity, Modal, TextInput, ActivityIndicator, Alert} from 'react-native';
 import React, { useState } from 'react';
 import CustomText from './CustomText';
 import { ExpenseDto } from '../pages/dto/ExpenseDto';
@@ -34,7 +34,7 @@ const Expense: React.FC<ExpenseProps> = ({props, onRefresh}) => {
       setAliasName('');
       if (onRefresh) onRefresh();
     } else {
-      alert("Failed to rename merchant.");
+      Alert.alert("Failed to rename merchant.");
     }
   };
 
@@ -189,38 +189,43 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.65)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: '#1e293b',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     padding: 24,
     minHeight: 250,
+    borderTopWidth: 1,
+    borderColor: '#334155',
   },
   modalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#f1f5f9',
     marginBottom: 8,
   },
   modalSubtitle: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 13,
+    color: '#64748b',
     marginBottom: 20,
+    lineHeight: 18,
   },
   textInput: {
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: '#334155',
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
     marginBottom: 24,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#0f172a',
+    color: '#f1f5f9',
   },
   modalActions: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 12,
   },
   modalButton: {
     flex: 1,
@@ -229,22 +234,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#F0F0F0',
-    marginRight: 10,
+    backgroundColor: '#334155',
   },
   saveButton: {
-    backgroundColor: '#007BFF',
-    marginLeft: 10,
+    backgroundColor: '#4f46e5',
   },
   cancelButtonText: {
-    color: '#333',
-    fontWeight: 'bold',
-    fontSize: 16,
+    color: '#94a3b8',
+    fontWeight: '600',
+    fontSize: 15,
   },
   saveButtonText: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontWeight: '700',
+    fontSize: 15,
   },
 });
 

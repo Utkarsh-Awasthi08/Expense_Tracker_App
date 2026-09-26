@@ -35,20 +35,21 @@ const ExpenseTrackerGraph: React.FC<ExpenseTrackerGraphProps> = ({ expenses }) =
       name: cat,
       amount: total,
       color: categoryColors[cat] || categoryColors['OTHER'],
-      legendFontColor: '#7F7F7F',
+      legendFontColor: '#94a3b8',
       legendFontSize: 12
     })).sort((a, b) => b.amount - a.amount);
   }, [expenses]);
 
   return (
-    <View style={{ alignItems: 'center', marginTop: 10 }}>
+    <View style={{ alignItems: 'center', marginTop: 10, backgroundColor: '#0f172a' }}>
       {chartData.length > 0 ? (
         <PieChart
           data={chartData}
           width={screenWidth}
           height={200}
           chartConfig={{
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            color: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
+            backgroundColor: '#0f172a',
           }}
           accessor={"amount"}
           backgroundColor={"transparent"}
@@ -57,7 +58,10 @@ const ExpenseTrackerGraph: React.FC<ExpenseTrackerGraphProps> = ({ expenses }) =
           absolute
         />
       ) : (
-        <CustomText style={{ marginVertical: 20, color: '#999' }}>No data to display graph.</CustomText>
+        <View style={{ paddingVertical: 40, alignItems: 'center' }}>
+          <CustomText style={{ color: '#334155', fontSize: 14, fontWeight: '500' }}>No spending data yet</CustomText>
+          <CustomText style={{ color: '#1e293b', fontSize: 12, marginTop: 4 }}>Add expenses to see your breakdown</CustomText>
+        </View>
       )}
     </View>
   );
