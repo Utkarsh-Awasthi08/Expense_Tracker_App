@@ -22,6 +22,7 @@
     "lucide-react-native": "^0.518.0",
     "metro-react-native-babel-preset": "^0.77.0",
     "react": "19.1.0",
+    "react-dom": "^19.1.0",
     "react-native": "0.80.0",
     "react-native-blob-util": "^0.25.1",
     "react-native-chart-kit": "^7.0.4",
